@@ -1,3 +1,24 @@
+/*******************************************
+l298n Motor Controller Code
+Written by Daniel Payne
+7/11/2019
+Daniel Payne
+
+l298n has ability to run two motors, this code uses two motors
+
+There are 3 control inputs per motor
+the enable pins which turns on the motor and allows you to control the speed via pmw
+- motor controller accepts pmw in range of 0 - 255. Use 70 as minimum pmw value for movement
+
+the input pins, in1 in2 is for first motor in3 in4 is for second motor
+
+motors moves forward when pins are set as such:
+in2,in4 = high in1,in3 = low 
+
+switch the order and motors move in reverse
+
+*******************************************/
+
 #include <Arduino.h>
 
 #define inputA1 15
@@ -7,8 +28,8 @@
 #define enA 13
 #define enB 13
 
-
-void setup() {
+void motorSetup() {
+    //Each motor requires 3 pins, enable, in1, in2
     pinMode(enA, OUTPUT);
     pinMode(enB, OUTPUT);
     pinMode(inputA1, OUTPUT);
@@ -56,10 +77,4 @@ void moveRight(){
     //Motor A forward
     digitalWrite(inputA1, LOW);
     digitalWrite(inputA2, HIGH);
-}
-
-void loop() {
-  setMotorSpeed(200,200);
-  moveForward();
-
 }
