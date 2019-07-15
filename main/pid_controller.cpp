@@ -1,34 +1,33 @@
     
 /********************************************************
- * PID Basic Example
- * Reading analog input 0 to control analog PWM output 3
+ * PID using PID library
+ * Daniel Payne
+ *
  ********************************************************/
 
 #include <PID_v1.h>
-
-#define PIN_INPUT 0
-#define PIN_OUTPUT 3
+#include <Arduino.h>
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=2, Ki=5, Kd=0;
+double Kp=4, Ki=0.05, Kd=0;
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
-void setup()
+void PIDsetup(double In)
 {
   //initialize the variables we're linked to
-  Input = analogRead(PIN_INPUT);
+  Input = In;
   Setpoint = 0;
 
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
 }
 
-void loop()
+double PIDloop(double In)
 {
-  Input = analogRead(PIN_INPUT);
+  Input = In;
   myPID.Compute();
-  analogWrite(PIN_OUTPUT, Output);
+  return Output;
 }
