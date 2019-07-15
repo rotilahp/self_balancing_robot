@@ -2,7 +2,6 @@
 l298n Motor Controller Code
 Written by Daniel Payne
 7/11/2019
-Daniel Payne
 
 l298n has ability to run two motors, this code uses two motors
 
