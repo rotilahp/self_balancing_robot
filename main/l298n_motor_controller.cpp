@@ -20,12 +20,12 @@ switch the order and motors move in reverse
 
 #include <Arduino.h>
 
-#define inputA1 15
-#define inputA2 18
-#define inputB1 4
-#define inputB2 5
-#define enA 13
-#define enB 13
+#define inputA1 11
+#define inputA2 10
+#define inputB1 9
+#define inputB2 6
+#define enA 5
+#define enB 3
 
 void motorSetup() {
     //Each motor requires 3 pins, enable, in1, in2
@@ -43,8 +43,8 @@ void setMotorSpeed(int pmwOutputA,int pmwOutputB){
     //Value ranges from 0 to 255
     //pmw should be > 70 for movement
     //use the map(value, 0, max value, 0, 255) to make things fit the 0 to 255 range
-    digitalWrite(enA,pmwOutputA);
-    digitalWrite(enB,pmwOutputB);
+    analogWrite(enA,pmwOutputA);
+    analogWrite(enB,pmwOutputB);
 }
 
 void moveForward(){
