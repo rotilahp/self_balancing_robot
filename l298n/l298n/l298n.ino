@@ -59,7 +59,7 @@ void moveRight(){
 }
 
 void loop() {
-  setMotorSpeed(10,10);
+  setMotorSpeed(55,55);
   moveForward();
 
 }
