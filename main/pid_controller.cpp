@@ -12,7 +12,7 @@
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=0.22, Ki=0.0, Kd=0.19;
+double Kp=0.22, Ki=0.0, Kd=0.12;
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
 void PIDsetup(double In)
