@@ -8,7 +8,6 @@
  *********************************************/
 
 #include "l298n_motor_controller.h"
-#include "bluetooth.h"
 #include "mpu_acc_and_gyro.h"
 #include "pid_controller.h"
 #include <Arduino.h>
@@ -39,11 +38,13 @@ void loop(){
    * ACCELEROMETER/GYROSCOPE
    * RAW DATA -> COMPLIMENTARY ANGLE
    ********************/
-  MPUdata = MPUloop();  //Gets complimentary angle in degrees
+  MPUdata = MPUloop()-5;  //Gets complimentary angle in degrees
  
-  
   //ROTATIONAL VELOCITY
-  MPUrotvel =sq(0.917185*2.0*9.8*0.1524*(1.0 - cos(MPUdata*PI/180.0))/0.00884422);
+  //MPUrotvel =sq(0.917185*2.0*9.8*0.1524*(1.0 - cos(MPUdata*PI/180.0))/0.01);
+  Serial.print("rotational velocity value:");
+  Serial.println(MPUrotvel);
+  Serial.println(MPUdata);
 
   /***************
    * WHICH WAY IS ROBOT TILTING!?!?!
@@ -51,10 +52,10 @@ void loop(){
    ******************/
   if (MPUdata > 0){           //forward or reverse tilt
       forward = true;
-      MPUdata = MPUdata*-1;
   }
   else {
       forward = false;
+      MPUdata=MPUdata*-1;
   }
   /***************
    * PID CONTROLLER
@@ -62,10 +63,16 @@ void loop(){
    * Set to provide more power the further away from 0 the angle becomes
    ***********************/
   //inputValue = map(MPUrotvel, 0,9,0,120);
-  Out = PIDloop(MPUrotvel);         //Places velocity into PIDloop, setpoint being 0. 
+  Out = PIDloop(MPUdata);         //Places velocity into PIDloop, setpoint being 0. 
+  Serial.println(Out);
+
+  /****************************
+   * MOTOR DEADZONE
+   */
   if (Out < 56){                    //Motor doesnt really work well below this value
       Out = 0;
   }
+  
   /***************
    * MOTOR CONTROLLER
    ******************/
@@ -85,9 +92,9 @@ void loop(){
    currentMillis = millis();
    if ((currentMillis - previousMillis) > 1000){
         previousMillis = currentMillis;
-        Serial.print(String(MPUdata,4));   //Sends angle
-        Serial.print(",");                 //comma seperates string on android app
-        Serial.print("60");                //Sends Temperature   
+       // Serial.println(String(MPUdata,4));   //Sends angle
+      //  Serial.print(",");                 //comma seperates string on android app
+       // Serial.print("60");                //Sends Temperature   
    }
   
   if (Serial.available() > 0) {
