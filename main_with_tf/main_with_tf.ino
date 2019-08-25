@@ -14,13 +14,11 @@
 #include <math.h>
 
 double MPUdata = 0;   //complimentary angle from accelerometer IMU
-double MPUrotvel = 0;
+int interval = 15; //1 second between loops
 double Out;   //pid output
-
 boolean forward = true;
-
+double MPUrotvel = 0;
 double inputValue = 0;
-
 int inByte;
 
 double previousMillis;
@@ -29,8 +27,6 @@ double currentMillis;
 double currentAngle;
 double previousAngle;
 double changeInAngle;
-
-int interval = 15; //1 second between loops
 
 void setup(){
     Serial.begin(9600);  
@@ -70,10 +66,9 @@ void loop(){
    **************************************/
   //ROTATIONAL VELOCITY
    MPUrotvel =sqrt(0.917185*2.0*9.8*0.1524*(1.0 - cos(MPUdata*PI/180.0))/0.08);
-   /*
+   
    currentAngle = MPUdata;
    changeInAngle = ((currentAngle-previousAngle)*PI/180.0)/(interval*pow(10,-3));
-   
    if (changeInAngle<0 & forward == false){
       MPUrotvel = MPUrotvel + sqrt(sq(changeInAngle))/2;
       //this should add to w in negative tilt
@@ -83,19 +78,17 @@ void loop(){
       //this should add to w in positive tilt
    }
    previousAngle = MPUdata;
-  */
+
    //Gain
    MPUrotvel = MPUrotvel*20;
    Serial.print("rotational value: ");
    Serial.println(MPUrotvel);
-
-   inputValue = map(MPUrotvel, 0, 25, 0, 170);
   /***************
    * PID CONTROLLER
    * Tries to return back to setpoint which is angle of 0
    * Set to provide more power the further away from 0 the angle becomes
    ***********************/
-  Out = PIDloop(inputValue);         //Places velocity into PIDloop, setpoint being 0. 
+  Out = PIDloop(MPUrotvel);         //Places velocity into PIDloop, setpoint being 0. 
   Serial.print("Out:");
   Serial.println(Out);
 

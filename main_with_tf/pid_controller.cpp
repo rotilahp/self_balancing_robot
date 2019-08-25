@@ -11,7 +11,7 @@
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=0.6, Ki=0.01 , Kd=0.0;
+double Kp=1.0, Ki=0.1, Kd=0.001;
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
 void PIDsetup(double In)
@@ -23,7 +23,7 @@ void PIDsetup(double In)
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
   //limit range of output to motor
-  myPID.SetOutputLimits(0,170);
+  myPID.SetOutputLimits(40.50,170);
   //set sample time , 15 milliseconds
   myPID.SetSampleTime(10);
   //tell PID to increase in response when input is above setpoint
